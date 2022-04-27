@@ -8,7 +8,7 @@ trigger:
 - master
 
 pool:
-  name: 'WinAgentPool'
+  name: 'LinuxAgentPool'
 
 steps:
 
@@ -18,15 +18,10 @@ steps:
     openshiftService: 'Openshift-cluopf01'
     version: '4.9.13'
     cmd: 'oc status'
-- task: oc-cmd@2
+- task: Docker@2
   inputs:
-    connectionType: 'OpenShift Connection Service'
-    openshiftService: 'Openshift-cluopf01'
-    version: '4.9.13'
-    cmd: 'oc project devops-testdemo'
-- task: oc-cmd@2
-  inputs:
-    connectionType: 'OpenShift Connection Service'
-    openshiftService: 'Openshift-cluopf01'
-    version: '4.9.13'
-    cmd: 'oc start-build nodejs-ex --follow'
+    containerRegistry: 'Openshift-cluopf01-Image-Registry'
+    repository: 'devops-testdemo3-tfs/imagestream-testdemo3-tfs'
+    command: 'build'
+    Dockerfile: '**/Dockerfile'
+  displayName: 'Build docker file'
